@@ -2,20 +2,18 @@ import fs from "fs";
 
 import { PoE2ItemParser } from "../src/parser";
 
-const openFile = (fileName: string) => {
-  return fs.readFileSync(`__tests__/data/${fileName}`, "utf-8");
-};
-
 describe("Parsing items", () => {
     it("Should parse all test cases", () => {
-        const filesInDir = fs.readdirSync("__tests__/data").filter(f => f.endsWith(".txt"));
+      const filesInDir = fs
+        .readdirSync("__tests__/fixtures")
+        .filter((f) => f.endsWith(".ts"));
 
-        filesInDir.forEach((file, i) => {
-            const fileContent = openFile(file);
-            const item = new PoE2ItemParser(fileContent).getItem();
-            const result = JSON.parse(openFile(file.replace(".txt", ".json")));
+        for(const file of filesInDir) {
+            const { itemText, expectedResult } = require(`./fixtures/${file}`);
 
-            expect(item).toEqual(result);
-        });
+            const parser = new PoE2ItemParser(itemText).getItem();
+
+            expect(parser).toEqual(expectedResult);
+        }   
     })
 });

@@ -12,6 +12,8 @@ const config: Config = {
     '**/?(*.)+(spec|test).[tj]s?(x)',
   ],
 
+  testPathIgnorePatterns: ['<rootDir>/__tests__/fixtures/'],
+
   // Collect coverage from .ts files
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/node_modules/**', '!**/dist/**'],
 
