@@ -48,6 +48,6 @@ export interface Item {
   corrupted?: boolean;
   flavorText?: string;
   duration?: number;
-  enchants?: string[];
+  enchants: string[];
   charges?: ItemCharge;
 }

@@ -149,7 +149,11 @@ export class PoE2ItemParser {
     }
 
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
-    const nextDash = this.input.indexOf("--", nextLineBreak);
+    let nextDash = this.input.indexOf("--", nextLineBreak);
+
+    if(nextDash === -1) {
+        nextDash = this.input.length;
+    }
 
     const input = this.input.slice(nextLineBreak, nextDash).split("\n");
 
@@ -159,7 +163,6 @@ export class PoE2ItemParser {
   }
 
   protected parseAffix(affix: string): string {
-    console.log(affix);
     let indexLBrace = affix.indexOf("[");
 
     while (indexLBrace !== -1) {

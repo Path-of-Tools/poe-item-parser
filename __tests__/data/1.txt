@@ -1,0 +1,24 @@
+Item Class: Body Armours
+Rarity: Rare
+Empyrean Mantle
+Expert Hexer's Robe
+--------
+Quality: +20% (augmented)
+Energy Shield: 485 (augmented)
+--------
+Requirements:
+Level: 65
+Int: 157
+--------
+Sockets: S S 
+--------
+Item Level: 66
+--------
++24% to Cold Resistance (rune)
+--------
++77 to maximum Energy Shield
+55% increased Energy Shield
++40 to maximum Life
++25% to Fire Resistance
++29% to Lightning Resistance
++220 to Stun Threshold
