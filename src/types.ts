@@ -37,6 +37,8 @@ export interface Item {
   runes: string[];
   implicits: string[];
   quality?: number;
+  qualityType?: string;
+  blockChance?: number;
   stats: ItemStats;
   charmSlots?: number;
   attacksPerSecond?: number;

@@ -111,8 +111,8 @@ export class PoE2ItemParser {
       this.parseRarity();
     }
 
-    if(!this.itemClass) {
-        this.parseItemClass();
+    if (!this.itemClass) {
+      this.parseItemClass();
     }
 
     if (this.rarity === "Normal") {
@@ -127,21 +127,25 @@ export class PoE2ItemParser {
     }
 
     // Some types have some extra text below them
-    if(this.itemClass && ['Jewels'].includes(this.itemClass)) {
-        extraOffset += 1;
+    if (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass)) {
+      extraOffset += 1;
     }
 
     if (this.rarity === "Unique") {
       // If rarity is unique, we also have to deal with the flavor text...
       if (this.corrupted) {
-        indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 3 - extraOffset];
+        indexFrom =
+          this.indexesOfDashes[this.indexesOfDashes.length - 3 - extraOffset];
       } else {
-        indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
+        indexFrom =
+          this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
       }
     } else if (!this.corrupted) {
-      indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 1 - extraOffset];
+      indexFrom =
+        this.indexesOfDashes[this.indexesOfDashes.length - 1 - extraOffset];
     } else {
-      indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
+      indexFrom =
+        this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
     }
 
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
@@ -213,55 +217,65 @@ export class PoE2ItemParser {
     return sockets.trim().split(" ").length;
   }
 
-  parseRunes(): Item["runes"] {
+  public parseRunes(): Item["runes"] {
     const runes = this.input.matchAll(REGEX.RUNES);
 
     return Array.from(runes).map((rune) => rune[1]);
   }
 
-  parseImplicits(): Item["implicits"] {
+  public parseImplicits(): Item["implicits"] {
     const implicits = this.input.matchAll(REGEX.IMPLICIT);
 
     return Array.from(implicits).map((implicit) => implicit[1]);
   }
 
-  parseQuality(): Item["quality"] {
-    const match = this.input.match(REGEX.QUALITY);
+  public parseQuality(): Item["quality"] {
+    const match = REGEX.QUALITY.exec(this.input);
 
-    return match ? Number(match[1]) : undefined;
+    if(!match) {
+        return undefined;
+    }
+
+    return Number(match[2]);
   }
 
-  parseEnergyShield(): Item["stats"]["energyShield"] {
+  public parseQualityType(): Item["qualityType"] {
+    const match = REGEX.QUALITY.exec(this.input);
+
+    return match ? match[1] : undefined;
+  }
+
+  public parseEnergyShield(): Item["stats"]["energyShield"] {
     const match = this.input.match(REGEX.ENERGY_SHIELD);
 
     return match ? Number(match[1]) : undefined;
   }
 
-  parseEvasionRating(): Item["stats"]["evasionRating"] {
+  public parseEvasionRating(): Item["stats"]["evasionRating"] {
     const match = this.input.match(REGEX.EVASION_RATING);
 
     return match ? Number(match[1]) : undefined;
   }
 
-  parseArmour(): Item["stats"]["armour"] {
+  public parseArmour(): Item["stats"]["armour"] {
     const match = this.input.match(REGEX.ARMOUR);
 
     return match ? Number(match[1]) : undefined;
   }
 
-  parseCharmSlots(): Item["charmSlots"] {
+  public parseCharmSlots(): Item["charmSlots"] {
     const match = this.input.match(REGEX.CHARM_SLOTS);
 
     return match ? Number(match[1]) : undefined;
   }
 
-  parseAttacksPerSecond(): Item["attacksPerSecond"] {
+  public parseAttacksPerSecond(): Item["attacksPerSecond"] {
     const match = this.input.match(REGEX.ATTACKS_PER_SECOND);
 
     return match ? Number(match[1]) : undefined;
   }
 
-  parseCriticalHitChance() {
+  public parseCriticalHitChance() {
     const match = this.input.match(REGEX.CRITICAL_HIT_CHANCE);
 
     return match ? Number(match[1]) : undefined;
@@ -352,6 +366,12 @@ export class PoE2ItemParser {
     return Array.from(enchants).map((enchant) => enchant[1]);
   }
 
+  public parseBlockChance(): Item["blockChance"] {
+    const match = this.input.match(REGEX.BLOCK_CHANCE);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
   getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
@@ -371,6 +391,7 @@ export class PoE2ItemParser {
       runes: this.parseRunes(),
       implicits: this.parseImplicits(),
       quality: this.parseQuality(),
+      qualityType: this.parseQualityType(),
       stats: {
         energyShield: this.parseEnergyShield(),
         evasionRating: this.parseEvasionRating(),
@@ -384,6 +405,7 @@ export class PoE2ItemParser {
       duration: this.parseDuration(),
       charges: this.parseChargeConsumption(),
       enchants: this.parseEnchants(),
+      blockChance: this.parseBlockChance(),
     };
   }
 }
