@@ -7,148 +7,15 @@ const openFile = (fileName: string) => {
 };
 
 describe("Parsing items", () => {
-  it("Should parse test case one", () => {
-    const file = openFile("1.txt");
+    it("Should parse all test cases", () => {
+        const filesInDir = fs.readdirSync("__tests__/data").filter(f => f.endsWith(".txt"));
 
-    const parsedItem = new PoE2ItemParser(file).getItem();
+        filesInDir.forEach((file, i) => {
+            const fileContent = openFile(file);
+            const item = new PoE2ItemParser(fileContent).getItem();
+            const result = JSON.parse(openFile(file.replace(".txt", ".json")));
 
-    expect(parsedItem).toEqual({
-      itemClass: "Body Armours",
-      itemLevel: 66,
-      itemRarity: "Rare",
-      itemName: {
-        lines: ["Empyrean Mantle", "Expert Hexer's Robe"],
-        name: "Empyrean Mantle Expert Hexer's Robe",
-      },
-      affixes: [
-        "+77 to maximum Energy Shield",
-        "55% increased Energy Shield",
-        "+40 to maximum Life",
-        "+25% to Fire Resistance",
-        "+29% to Lightning Resistance",
-        "+220 to Stun Threshold",
-      ],
-      requirements: {
-        level: 65,
-        intelligence: 157,
-        dexterity: undefined,
-        strength: undefined,
-      },
-      sockets: 2,
-      runes: ["+24% to Cold Resistance"],
-      implicits: [],
-      quality: 20,
-      qualityType: undefined,
-      blockChance: undefined,
-      stats: {
-        energyShield: 485,
-        evasionRating: undefined,
-        armour: undefined,
-        spirit: undefined,
-      },
-      charmSlots: undefined,
-      attacksPerSecond: undefined,
-      criticalHitChance: undefined,
-      elementalDamage: undefined,
-      physicalDamage: undefined,
-      corrupted: false,
-      flavorText: undefined,
-      duration: undefined,
-      enchants: [],
-      charges: undefined,
-      identified: true,
-    });
-  });
-
-  it("Should parse unidentified items", () => {
-    const file = openFile("2.txt");
-
-    const parsedItem = new PoE2ItemParser(file).getItem();
-
-    expect(parsedItem).toEqual({
-      itemClass: "Body Armours",
-      itemLevel: 80,
-      itemRarity: "Rare",
-      itemName: {
-        lines: ["Advanced Silk Robe"],
-        name: "Advanced Silk Robe",
-      },
-      affixes: [],
-      requirements: {
-        level: undefined,
-        intelligence: 105,
-        dexterity: undefined,
-        strength: undefined,
-      },
-      sockets: 0,
-      runes: [],
-      implicits: [],
-      quality: undefined,
-      qualityType: undefined,
-      blockChance: undefined,
-      stats: {
-        energyShield: 106,
-        evasionRating: undefined,
-        armour: undefined,
-        spirit: undefined,
-      },
-      charmSlots: undefined,
-      attacksPerSecond: undefined,
-      criticalHitChance: undefined,
-      elementalDamage: undefined,
-      physicalDamage: undefined,
-      corrupted: false,
-      flavorText: undefined,
-      duration: undefined,
-      enchants: [],
-      charges: undefined,
-      identified: false,
-    });
-  })
-
-  it("Should parse items with spirit", () => {
-    const file = openFile("3.txt");
-
-    const parsedItem = new PoE2ItemParser(file).getItem();
-
-    expect(parsedItem).toEqual({
-      itemClass: "Sceptres",
-      itemLevel: 80,
-      itemRarity: "Magic",
-      itemName: {
-        lines: ["Rattling Sceptre of Progression"],
-        name: "Rattling Sceptre of Progression",
-      },
-      affixes: ["Allies in your Presence have +15% to all Elemental Resistances"],
-      requirements: {
-        level: 78,
-        intelligence: 138,
-        dexterity: undefined,
-        strength: 54,
-      },
-      sockets: 0,
-      runes: [],
-      implicits: [],
-      quality: undefined,
-      qualityType: undefined,
-      blockChance: undefined,
-      stats: {
-        energyShield: undefined,
-        evasionRating: undefined,
-        armour: undefined,
-        spirit: 100,
-      },
-      charmSlots: undefined,
-      attacksPerSecond: undefined,
-      criticalHitChance: undefined,
-      elementalDamage: undefined,
-      physicalDamage: undefined,
-      corrupted: false,
-      flavorText: undefined,
-      duration: undefined,
-      enchants: [],
-      charges: undefined,
-      identified: true,
-    });
-  })
+            expect(item).toEqual(result);
+        });
+    })
 });

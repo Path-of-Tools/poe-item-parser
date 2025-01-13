@@ -1,0 +1,24 @@
+{
+    "itemClass": "Body Armours",
+    "itemLevel": 80,
+    "itemRarity": "Rare",
+    "itemName": {
+      "lines": [
+        "Advanced Silk Robe"
+      ],
+      "name": "Advanced Silk Robe"
+    },
+    "affixes": [],
+    "requirements": {
+      "intelligence": 105
+    },
+    "sockets": 0,
+    "runes": [],
+    "implicits": [],
+    "stats": {
+      "energyShield": 106
+    },
+    "corrupted": false,
+    "enchants": [],
+    "identified": false
+  }
