@@ -24,4 +24,5 @@ export const REGEX = {
     CORRUPTED: /^Corrupted$/m,
     LASTS_X_SECONDS: /Lasts (\d+) Seconds/,
     CHARGE_CONSUMPTION: /Consumes (\d+) of (\d+) Charges on use/,
+    NOTE_PRESENT: /Note: (.*)/,
   };

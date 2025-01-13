@@ -5,18 +5,31 @@ import { type ItemName, type Item, type ItemRequirement } from "./types";
 export class PoE2ItemParser {
   private iLevelIndex: number = -1;
   private iRarityIndex: number = -1;
+  private itemClass?: string;
   private corrupted?: boolean;
   private rarity?: Item["itemRarity"];
   private indexesOfDashes: number[] = [];
-
+  private hasNote: boolean = false;
 
   constructor(private readonly input: string) {
     this.indexesOfDashes = this.getIndexesOf("--------");
+    this.hasNote = this.parseItemNote();
+  }
+
+  private parseItemNote(): boolean {
+    const match = this.input.match(REGEX.NOTE_PRESENT);
+
+    return !!match;
   }
 
   public parseItemClass(): Item["itemClass"] {
     const match = this.input.match(REGEX.ITEM_CLASS);
-    return match ? match[1] : undefined;
+
+    const result = match ? match[1] : undefined;
+
+    this.itemClass = result;
+
+    return result;
   }
 
   public parseItemLevel(): Item["itemLevel"] {
@@ -65,7 +78,7 @@ export class PoE2ItemParser {
       this.parseRarity();
     }
 
-    const nextDashIndex = this.input.indexOf("-", startSearchIndex);
+    const nextDashIndex = this.input.indexOf("--", startSearchIndex);
 
     const content = this.input.slice(startSearchIndex, nextDashIndex);
 
@@ -98,27 +111,41 @@ export class PoE2ItemParser {
       this.parseRarity();
     }
 
+    if(!this.itemClass) {
+        this.parseItemClass();
+    }
+
     if (this.rarity === "Normal") {
       return [];
     }
 
     let indexFrom = -1;
+    let extraOffset = 0;
+
+    if (this.hasNote) {
+      extraOffset += 1;
+    }
+
+    // Some types have some extra text below them
+    if(this.itemClass && ['Jewels'].includes(this.itemClass)) {
+        extraOffset += 1;
+    }
 
     if (this.rarity === "Unique") {
       // If rarity is unique, we also have to deal with the flavor text...
       if (this.corrupted) {
-        indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 3];
+        indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 3 - extraOffset];
       } else {
-        indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 2];
+        indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
       }
     } else if (!this.corrupted) {
-      indexFrom = this.input.lastIndexOf("-");
+      indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 1 - extraOffset];
     } else {
-      indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 2];
+      indexFrom = this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
     }
 
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
-    const nextDash = this.input.indexOf("-", nextLineBreak);
+    const nextDash = this.input.indexOf("--", nextLineBreak);
 
     const input = this.input.slice(nextLineBreak, nextDash).split("\n");
 
@@ -128,6 +155,7 @@ export class PoE2ItemParser {
   }
 
   protected parseAffix(affix: string): string {
+    console.log(affix);
     let indexLBrace = affix.indexOf("[");
 
     while (indexLBrace !== -1) {
@@ -299,7 +327,7 @@ export class PoE2ItemParser {
     }
 
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
-    const nextDash = this.input.indexOf("-", nextLineBreak);
+    const nextDash = this.input.indexOf("--", nextLineBreak);
 
     return this.input.slice(nextLineBreak, nextDash).trim();
   }
@@ -324,7 +352,7 @@ export class PoE2ItemParser {
     return Array.from(enchants).map((enchant) => enchant[1]);
   }
 
-  getItem(): Partial<Item> {
+  getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
       itemRarity: this.parseRarity(),
