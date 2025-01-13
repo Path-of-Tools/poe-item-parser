@@ -136,7 +136,7 @@ export class PoE2ItemParser {
     }
 
     // Some types have some extra text below them
-    if (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass)) {
+    if (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass) || this.itemClass?.endsWith("Flasks")) {
       extraOffset += 1;
     }
 
@@ -335,21 +335,36 @@ export class PoE2ItemParser {
     if (!this.corrupted) {
       this.corrupted = this.parseCorrupted();
     }
+    
 
     const rarity = this.parseRarity();
 
     if (rarity !== "Unique") {
+      // Not sure if any non-unique items has any flavor text, so for now this will do...
       return undefined;
+    }
+
+    if (!this.itemClass) {
+      this.parseItemClass();
     }
 
     const indexesOfDashes = this.getIndexesOf("--------");
 
     let indexFrom = -1;
+    let extraOffset = 0;
+
+    if (this.hasNote) {
+      extraOffset += 1;
+    }
+
+    if (this.itemClass?.endsWith("Flasks")) {
+      extraOffset += 1;
+    }
 
     if (this.corrupted) {
-      indexFrom = indexesOfDashes[indexesOfDashes.length - 2];
+      indexFrom = indexesOfDashes[indexesOfDashes.length - 2 - extraOffset];
     } else {
-      indexFrom = indexesOfDashes[indexesOfDashes.length - 1];
+      indexFrom = indexesOfDashes[indexesOfDashes.length - 1 - extraOffset];
     }
 
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
