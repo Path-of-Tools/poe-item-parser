@@ -7,6 +7,7 @@ export class PoE2ItemParser {
   private iRarityIndex: number = -1;
   private itemClass?: string;
   private corrupted?: boolean;
+  private identified?: boolean;
   private rarity?: Item["itemRarity"];
   private indexesOfDashes: number[] = [];
   private hasNote: boolean = false;
@@ -103,6 +104,14 @@ export class PoE2ItemParser {
   }
 
   public parseAffixes(): Item["affixes"] {
+    if (this.identified === undefined) {
+      this.identified = this.parseIdentified();
+
+      if (!this.identified) {
+        return [];
+      }
+    }
+
     if (this.corrupted === undefined) {
       this.corrupted = this.parseCorrupted();
     }
@@ -151,8 +160,8 @@ export class PoE2ItemParser {
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
     let nextDash = this.input.indexOf("--", nextLineBreak);
 
-    if(nextDash === -1) {
-        nextDash = this.input.length;
+    if (nextDash === -1) {
+      nextDash = this.input.length;
     }
 
     const input = this.input.slice(nextLineBreak, nextDash).split("\n");
@@ -186,7 +195,7 @@ export class PoE2ItemParser {
 
   protected parseIntelligenceRequirement(): ItemRequirement["intelligence"] {
     const match = this.input.match(REGEX.REQUIREMENT_INT);
-
+    
     return match ? Number(match[1]) : undefined;
   }
 
@@ -235,8 +244,8 @@ export class PoE2ItemParser {
   public parseQuality(): Item["quality"] {
     const match = REGEX.QUALITY.exec(this.input);
 
-    if(!match) {
-        return undefined;
+    if (!match) {
+      return undefined;
     }
 
     return Number(match[2]);
@@ -375,6 +384,12 @@ export class PoE2ItemParser {
     return match ? Number(match[1]) : undefined;
   }
 
+  public parseIdentified(): boolean {
+    const match = this.input.match(REGEX.UNIDENTIFIED);
+
+    return !match;
+  }
+
   getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
@@ -409,6 +424,7 @@ export class PoE2ItemParser {
       charges: this.parseChargeConsumption(),
       enchants: this.parseEnchants(),
       blockChance: this.parseBlockChance(),
+      identified: this.parseIdentified(),
     };
   }
 }

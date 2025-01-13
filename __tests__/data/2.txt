@@ -1,0 +1,12 @@
+Item Class: Body Armours
+Rarity: Rare
+Advanced Silk Robe
+--------
+Energy Shield: 106
+--------
+Requirements:
+Intelligence: 105
+--------
+Item Level: 80
+--------
+Unidentified

@@ -55,6 +55,52 @@ describe("Parsing items", () => {
       duration: undefined,
       enchants: [],
       charges: undefined,
+      identified: true,
     });
   });
+
+  it("Should parse unidentified items", () => {
+    const file = openFile("2.txt");
+
+    const parsedItem = new PoE2ItemParser(file).getItem();
+
+    expect(parsedItem).toEqual({
+      itemClass: "Body Armours",
+      itemLevel: 80,
+      itemRarity: "Rare",
+      itemName: {
+        lines: ["Advanced Silk Robe"],
+        name: "Advanced Silk Robe",
+      },
+      affixes: [],
+      requirements: {
+        level: undefined,
+        intelligence: 105,
+        dexterity: undefined,
+        strength: undefined,
+      },
+      sockets: 0,
+      runes: [],
+      implicits: [],
+      quality: undefined,
+      qualityType: undefined,
+      blockChance: undefined,
+      stats: {
+        energyShield: 106,
+        evasionRating: undefined,
+        armour: undefined,
+      },
+      charmSlots: undefined,
+      attacksPerSecond: undefined,
+      criticalHitChance: undefined,
+      elementalDamage: undefined,
+      physicalDamage: undefined,
+      corrupted: false,
+      flavorText: undefined,
+      duration: undefined,
+      enchants: [],
+      charges: undefined,
+      identified: false,
+    });
+  })
 });

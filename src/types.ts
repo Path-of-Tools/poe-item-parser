@@ -50,4 +50,5 @@ export interface Item {
   duration?: number;
   enchants: string[];
   charges?: ItemCharge;
+  identified: boolean;
 }
