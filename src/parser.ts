@@ -12,9 +12,21 @@ export class PoE2ItemParser {
   private indexesOfDashes: number[] = [];
   private hasNote: boolean = false;
 
-  constructor(private readonly input: string) {
+  constructor(private input: string) {
+    this.fixIfUnfulfilledRequirements();
+
     this.indexesOfDashes = this.getIndexesOf("--------");
     this.hasNote = this.parseItemNote();
+  }
+
+  private fixIfUnfulfilledRequirements() {
+    if (
+      this.input.includes("You cannot use this item. Its stats will be ignored")
+    ) {
+      this.input = this.input
+        .replace("You cannot use this item. Its stats will be ignored", "")
+        .replace("--------", "");
+    }
   }
 
   private parseItemNote(): boolean {
@@ -136,7 +148,10 @@ export class PoE2ItemParser {
     }
 
     // Some types have some extra text below them
-    if (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass) || this.itemClass?.endsWith("Flasks")) {
+    if (
+      (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass)) ||
+      this.itemClass?.endsWith("Flasks")
+    ) {
       extraOffset += 1;
     }
 
@@ -335,7 +350,6 @@ export class PoE2ItemParser {
     if (!this.corrupted) {
       this.corrupted = this.parseCorrupted();
     }
-    
 
     const rarity = this.parseRarity();
 
@@ -368,7 +382,11 @@ export class PoE2ItemParser {
     }
 
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
-    const nextDash = this.input.indexOf("--", nextLineBreak);
+    let nextDash = this.input.indexOf("--", nextLineBreak);
+
+    if (nextDash === -1) {
+      nextDash = this.input.length;
+    }
 
     return this.input.slice(nextLineBreak, nextDash).trim();
   }
