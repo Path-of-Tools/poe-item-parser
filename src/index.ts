@@ -1,0 +1,1 @@
+export { PoE2ItemParser } from "./parser";

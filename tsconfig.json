@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "nodenext",
+    "outDir": "dist",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "lib": ["esnext", "es6"],
+    "target": "esnext",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "typeRoots": ["./node_modules/@types"],
+    "noImplicitAny": true,
+    "strict": true,
+    "rootDir": "./"
+  },
+  "include": ["./src/**/*.ts"]
+}
