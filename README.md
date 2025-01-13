@@ -28,9 +28,9 @@ const item = new PoE2Itemparser(`itemtexthere`);
 
 ```typescript
 interface Item {
-  itemClass?: string | undefined;
-  itemLevel?: number | undefined;
-  itemRarity?: string | undefined;
+  itemClass?: string;
+  itemLevel?: number;
+  itemRarity?: string;
   itemName: ItemName;
   affixes: string[];
   requirements?: ItemRequirement;
