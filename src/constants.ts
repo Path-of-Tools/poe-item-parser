@@ -10,6 +10,7 @@ export const REGEX = {
     QUALITY: /Quality(?: \(([^)]+)\))?: \+(\d+)%(?: \(augmented\))?/,
     BLOCK_CHANCE: /Block chance: (\d+)%/,
     ENERGY_SHIELD: /Energy Shield: (\d+)/,
+    SPIRIT: /Spirit: (\d+)/,
     EVASION_RATING: /Evasion Rating: (\d+)/,
     ARMOUR: /Armour: (\d+)/,
     RUNES: /(.*) \(rune\)/g,

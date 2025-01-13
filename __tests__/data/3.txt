@@ -1,0 +1,14 @@
+Item Class: Sceptres
+Rarity: Magic
+Rattling Sceptre of Progression
+--------
+Spirit: 100
+--------
+Requirements:
+Level: 78
+Str: 54 (unmet)
+Int: 138
+--------
+Item Level: 80
+--------
+Allies in your Presence have +15% to all Elemental Resistances

@@ -195,7 +195,7 @@ export class PoE2ItemParser {
 
   protected parseIntelligenceRequirement(): ItemRequirement["intelligence"] {
     const match = this.input.match(REGEX.REQUIREMENT_INT);
-    
+
     return match ? Number(match[1]) : undefined;
   }
 
@@ -390,6 +390,12 @@ export class PoE2ItemParser {
     return !match;
   }
 
+  public parseSpirit(): Item["stats"]["spirit"] {
+    const match = this.input.match(REGEX.SPIRIT);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
   getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
@@ -414,6 +420,7 @@ export class PoE2ItemParser {
         energyShield: this.parseEnergyShield(),
         evasionRating: this.parseEvasionRating(),
         armour: this.parseArmour(),
+        spirit: this.parseSpirit(),
       },
       charmSlots: this.parseCharmSlots(),
       attacksPerSecond: this.parseAttacksPerSecond(),

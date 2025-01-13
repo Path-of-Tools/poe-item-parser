@@ -44,6 +44,7 @@ describe("Parsing items", () => {
         energyShield: 485,
         evasionRating: undefined,
         armour: undefined,
+        spirit: undefined,
       },
       charmSlots: undefined,
       attacksPerSecond: undefined,
@@ -89,6 +90,7 @@ describe("Parsing items", () => {
         energyShield: 106,
         evasionRating: undefined,
         armour: undefined,
+        spirit: undefined,
       },
       charmSlots: undefined,
       attacksPerSecond: undefined,
@@ -101,6 +103,52 @@ describe("Parsing items", () => {
       enchants: [],
       charges: undefined,
       identified: false,
+    });
+  })
+
+  it("Should parse items with spirit", () => {
+    const file = openFile("3.txt");
+
+    const parsedItem = new PoE2ItemParser(file).getItem();
+
+    expect(parsedItem).toEqual({
+      itemClass: "Sceptres",
+      itemLevel: 80,
+      itemRarity: "Magic",
+      itemName: {
+        lines: ["Rattling Sceptre of Progression"],
+        name: "Rattling Sceptre of Progression",
+      },
+      affixes: ["Allies in your Presence have +15% to all Elemental Resistances"],
+      requirements: {
+        level: 78,
+        intelligence: 138,
+        dexterity: undefined,
+        strength: 54,
+      },
+      sockets: 0,
+      runes: [],
+      implicits: [],
+      quality: undefined,
+      qualityType: undefined,
+      blockChance: undefined,
+      stats: {
+        energyShield: undefined,
+        evasionRating: undefined,
+        armour: undefined,
+        spirit: 100,
+      },
+      charmSlots: undefined,
+      attacksPerSecond: undefined,
+      criticalHitChance: undefined,
+      elementalDamage: undefined,
+      physicalDamage: undefined,
+      corrupted: false,
+      flavorText: undefined,
+      duration: undefined,
+      enchants: [],
+      charges: undefined,
+      identified: true,
     });
   })
 });

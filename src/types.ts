@@ -9,6 +9,7 @@ export interface ItemStats {
   energyShield?: number;
   evasionRating?: number;
   armour?: number;
+  spirit?: number;
 }
 
 export interface ItemDamageRange {
