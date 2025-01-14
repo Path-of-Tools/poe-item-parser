@@ -389,7 +389,11 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    if (this.itemClass?.endsWith("Flasks")) {
+    // Some types have some extra text below them
+    if (
+      (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass)) ||
+      this.itemClass?.endsWith("Flasks")
+    ) {
       extraOffset += 1;
     }
 
