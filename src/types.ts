@@ -50,6 +50,8 @@ export interface Item {
   attacksPerSecond?: number;
   criticalHitChance?: number;
   reloadTime?: number;
+  limitedTo?: number;
+  radius?: string | undefined;
   elementalDamage?: ItemDamageRange[];
   physicalDamage?: ItemDamageRange[];
   corrupted?: boolean;

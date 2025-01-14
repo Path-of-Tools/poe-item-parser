@@ -314,6 +314,18 @@ export class PoE2ItemParser {
     return match ? Number(match[1]) : undefined;
   }
 
+  public parseLimitedTo(): Item["limitedTo"] {
+    const match = this.input.match(REGEX.LIMITED_TO);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseRadius(): Item["radius"] {
+    const match = this.input.match(REGEX.RADIUS);
+
+    return match ? match[1] : undefined;
+  }
+
   public parseElementalDamage(): Item["elementalDamage"] {
     const match = this.input.match(REGEX.ELEMENTAL_DAMAGE_PRESENT);
 
@@ -470,6 +482,8 @@ export class PoE2ItemParser {
       attacksPerSecond: this.parseAttacksPerSecond(),
       criticalHitChance: this.parseCriticalHitChance(),
       reloadTime: this.parseReloadTime(),
+      limitedTo: this.parseLimitedTo(),
+      radius: this.parseRadius(),
       elementalDamage: this.parseElementalDamage(),
       physicalDamage: this.parsePhysicalDamage(),
       duration: this.parseDuration(),
