@@ -22,6 +22,11 @@ export interface ItemName {
   name: string;
 }
 
+export interface ItemFlavorText {
+  flavorText: string;
+  lines: string[];
+}
+
 export interface ItemCharge {
   consumes: number;
   max: number;
@@ -47,7 +52,7 @@ export interface Item {
   elementalDamage?: ItemDamageRange[];
   physicalDamage?: ItemDamageRange[];
   corrupted?: boolean;
-  flavorText?: string;
+  flavorText?: ItemFlavorText;
   duration?: number;
   enchants: string[];
   charges?: ItemCharge;

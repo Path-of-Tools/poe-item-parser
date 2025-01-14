@@ -59,7 +59,10 @@ const expectedResult: Item = {
   corrupted: false,
   enchants: [],
   identified: true,
-  flavorText: "What is life, but a dreamlike spiral of panic?",
+  flavorText: {
+    lines: ["What is life, but a dreamlike spiral of panic?"],
+    flavorText: "What is life, but a dreamlike spiral of panic?",
+  },
   charges: {
     consumes: 10,
     max: 75,

@@ -52,7 +52,10 @@ const expectedResult: Item = {
   },
   enchants: [],
   identified: true,
-  flavorText: "The older brother retained calm in the midst of fury."
+  flavorText: {
+    flavorText: "The older brother retained calm in the midst of fury.",
+    lines: ["The older brother retained calm in the midst of fury."]
+  }
 };
 
 export { itemText, expectedResult };

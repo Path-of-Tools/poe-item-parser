@@ -388,7 +388,12 @@ export class PoE2ItemParser {
       nextDash = this.input.length;
     }
 
-    return this.input.slice(nextLineBreak, nextDash).trim();
+    const value = this.input.slice(nextLineBreak, nextDash).trim();
+
+    return {
+      flavorText: value.replace("\n", " ").trim(),
+      lines: value.split("\n").filter((line) => line !== ""),
+    };
   }
 
   public parseDuration(): Item["duration"] {
