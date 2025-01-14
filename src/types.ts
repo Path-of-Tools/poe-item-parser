@@ -49,6 +49,7 @@ export interface Item {
   charmSlots?: number;
   attacksPerSecond?: number;
   criticalHitChance?: number;
+  reloadTime?: number;
   elementalDamage?: ItemDamageRange[];
   physicalDamage?: ItemDamageRange[];
   corrupted?: boolean;

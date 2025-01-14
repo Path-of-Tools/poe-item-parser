@@ -19,6 +19,7 @@ export const REGEX = {
     CHARM_SLOTS: /Charm Slots: (\d+)/,
     ATTACKS_PER_SECOND: /Attacks per Second: (\d+(\.\d+)?)(?: \(augmented\))?/,
     CRITICAL_HIT_CHANCE: /Critical Hit Chance: (\d+)%?/,
+    RELOAD_TIME: /Reload Time: (\d+(\.\d+)?)(?: \(augmented\))?/,
     ELEMENTAL_DAMAGE_PRESENT: /Elemental Damage: (.*)/,
     ELEMENTAL_DAMAGE: /(\d+)-?(\d+)?/g,
     PHYSICAL_DAMAGE_PRESENT: /Physical Damage: (.*)/,

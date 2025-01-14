@@ -302,8 +302,14 @@ export class PoE2ItemParser {
     return match ? Number(match[1]) : undefined;
   }
 
-  public parseCriticalHitChance() {
+  public parseCriticalHitChance(): Item["criticalHitChance"] {
     const match = this.input.match(REGEX.CRITICAL_HIT_CHANCE);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseReloadTime(): Item["reloadTime"] {
+    const match = this.input.match(REGEX.RELOAD_TIME);
 
     return match ? Number(match[1]) : undefined;
   }
@@ -463,6 +469,7 @@ export class PoE2ItemParser {
       charmSlots: this.parseCharmSlots(),
       attacksPerSecond: this.parseAttacksPerSecond(),
       criticalHitChance: this.parseCriticalHitChance(),
+      reloadTime: this.parseReloadTime(),
       elementalDamage: this.parseElementalDamage(),
       physicalDamage: this.parsePhysicalDamage(),
       duration: this.parseDuration(),
