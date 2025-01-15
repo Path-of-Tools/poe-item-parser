@@ -22,7 +22,7 @@
     "url": "https://github.com/Path-of-Tools/poe-item-parser.git"
   },
   "type": "module",
-  "keywords": [],
+  "keywords": ["Path of Exile", "Path of Exile 2", "PoE Item Parser", "Nodejs PoE", "PoE", "PoE 2"],
   "author": "Petter Kaspersen (petter@kaspersen.dev)",
   "license": "ISC",
   "description": "Parse the item text for Path of Exile 2 item",
