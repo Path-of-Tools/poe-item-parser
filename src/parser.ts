@@ -24,6 +24,16 @@ export class PoE2ItemParser {
     this.hasNote = this.parseItemNote();
   }
 
+  // Some types have some extra text below them
+  private hasTutorialText(): boolean|undefined {
+    if (!this.itemClass) {
+      this.parseItemClass();
+    }
+
+    return (this.itemClass && ["Jewels", "Quivers", "Relics"].includes(this.itemClass)) ||
+      this.itemClass?.endsWith("Flasks");
+  }
+
   private fixIfUnfulfilledRequirements() {
     if (
       this.input.includes("You cannot use this item. Its stats will be ignored")
@@ -152,11 +162,7 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    // Some types have some extra text below them
-    if (
-      (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass)) ||
-      this.itemClass?.endsWith("Flasks")
-    ) {
+    if (this.hasTutorialText()) {
       extraOffset += 1;
     }
 
@@ -394,11 +400,7 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    // Some types have some extra text below them
-    if (
-      (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass)) ||
-      this.itemClass?.endsWith("Flasks")
-    ) {
+    if (this.hasTutorialText()) {
       extraOffset += 1;
     }
 
