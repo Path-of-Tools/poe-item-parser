@@ -1,4 +1,5 @@
 [![npm version](https://badge.fury.io/js/poe-item-parser.svg)](https://badge.fury.io/js/poe-item-parser)
+![Tests](https://github.com/Path-of-Tools/poe-item-parser/actions/workflows/jest-tests.yml/badge.svg)
 
 # Path of Exile 2 Item Parser
 
