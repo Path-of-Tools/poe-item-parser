@@ -1,23 +1,21 @@
 {
   "name": "poe-item-parser",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "files": [
-    "dist"
+    "build"
   ],
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/poe2-item-parser.es.js",
-      "require": "./dist/poe2-item-parser.cjs.js",
-      "default": "./dist/poe2-item-parser.es.js"
+      "import": "./dist/poe-item-parser.js",
+      "types": "./dist/index.d.ts"
     }
   },
-  "main": "./dist/poe2-item-parser.cjs.js",
-  "module": "./dist/poe2-item-parser.es.js",
-  "types": "./dist/types.d.ts",
+  "main": "./dist/poe-item-parser.js",
+  "module": "./dist/poe-item-parser.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "vite build"
+    "build": "rimraf build/**/* && tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.ts"
   },
   "repository": {
     "type": "git",
@@ -30,7 +28,10 @@
   "description": "Parse the item text for Path of Exile 2 item",
   "devDependencies": {
     "@types/jest": "^29.5.14",
+    "copyfiles": "^2.4.1",
+    "dts-bundle-generator": "^9.5.1",
     "jest": "^29.7.0",
+    "rimraf": "^6.0.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
