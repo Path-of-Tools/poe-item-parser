@@ -1,6 +1,11 @@
 import { REGEX } from "./constants";
 
-import { type ItemName, type Item, type ItemRequirement } from "./types";
+import {
+  type ItemName,
+  type Item,
+  type ItemRequirement,
+  type FlaskRecovery,
+} from "./types";
 
 export class PoE2ItemParser {
   private iLevelIndex: number = -1;
@@ -456,6 +461,35 @@ export class PoE2ItemParser {
     return match ? Number(match[1]) : undefined;
   }
 
+  // Dirty, but does the job!
+  public parseFlaskRecovery(): Item["flaskRecovery"] {
+    const match = this.input.match(REGEX.RECOVERS_CHARGES);
+
+    if (!match) {
+      return undefined;
+    }
+
+    const output: FlaskRecovery = {
+      over: Number(match.groups?.second.replace(",", ".")),
+    };
+
+    switch (match.groups?.identifier) {
+      case "Mana":
+        output.mana = Number(match.groups?.first);
+        break;
+      case "Life":
+        output.life = Number(match.groups?.first);
+        break;
+      case "Energy Shield":
+        output.energyShield = Number(match.groups?.first);
+        break;
+      default:
+        return undefined;
+    }
+
+    return output;
+  }
+
   getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
@@ -495,6 +529,7 @@ export class PoE2ItemParser {
       enchants: this.parseEnchants(),
       blockChance: this.parseBlockChance(),
       identified: this.parseIdentified(),
+      flaskRecovery: this.parseFlaskRecovery(),
     };
   }
 }

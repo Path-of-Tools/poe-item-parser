@@ -31,4 +31,5 @@ export const REGEX = {
     LASTS_X_SECONDS: /Lasts (\d+) Seconds/,
     CHARGE_CONSUMPTION: /Consumes (\d+) of (\d+) Charges on use/,
     NOTE_PRESENT: /Note: (.*)/,
+    RECOVERS_CHARGES: /(?<first>\d+)(?: \(augmented\))? (?<identifier>\w+) over (?<second>\d+(?:,\d+)?)(?: \(augmented\))?/
   };

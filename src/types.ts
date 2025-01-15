@@ -32,6 +32,13 @@ export interface ItemCharge {
   max: number;
 }
 
+export interface FlaskRecovery {
+  life?: number;
+  mana?: number;
+  energyShield?: number;
+  over: number;
+}
+
 export interface Item {
   itemClass?: string | undefined;
   itemLevel?: number | undefined;
@@ -59,5 +66,6 @@ export interface Item {
   duration?: number;
   enchants: string[];
   charges?: ItemCharge;
+  flaskRecovery?: FlaskRecovery;
   identified: boolean;
 }

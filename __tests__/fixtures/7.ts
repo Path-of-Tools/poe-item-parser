@@ -66,6 +66,10 @@ const expectedResult: Item = {
   charges: {
     consumes: 10,
     max: 75,
+  },
+  flaskRecovery: {
+    over: 9.7,
+    mana: 372,
   }
 };
 
