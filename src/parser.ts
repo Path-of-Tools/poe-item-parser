@@ -302,10 +302,28 @@ export class PoE2ItemParser {
     return match ? Number(match[1]) : undefined;
   }
 
-  public parseCriticalHitChance() {
+  public parseCriticalHitChance(): Item["criticalHitChance"] {
     const match = this.input.match(REGEX.CRITICAL_HIT_CHANCE);
 
     return match ? Number(match[1]) : undefined;
+  }
+
+  public parseReloadTime(): Item["reloadTime"] {
+    const match = this.input.match(REGEX.RELOAD_TIME);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseLimitedTo(): Item["limitedTo"] {
+    const match = this.input.match(REGEX.LIMITED_TO);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseRadius(): Item["radius"] {
+    const match = this.input.match(REGEX.RADIUS);
+
+    return match ? match[1] : undefined;
   }
 
   public parseElementalDamage(): Item["elementalDamage"] {
@@ -371,7 +389,11 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    if (this.itemClass?.endsWith("Flasks")) {
+    // Some types have some extra text below them
+    if (
+      (this.itemClass && ["Jewels", "Quivers"].includes(this.itemClass)) ||
+      this.itemClass?.endsWith("Flasks")
+    ) {
       extraOffset += 1;
     }
 
@@ -463,6 +485,9 @@ export class PoE2ItemParser {
       charmSlots: this.parseCharmSlots(),
       attacksPerSecond: this.parseAttacksPerSecond(),
       criticalHitChance: this.parseCriticalHitChance(),
+      reloadTime: this.parseReloadTime(),
+      limitedTo: this.parseLimitedTo(),
+      radius: this.parseRadius(),
       elementalDamage: this.parseElementalDamage(),
       physicalDamage: this.parsePhysicalDamage(),
       duration: this.parseDuration(),
