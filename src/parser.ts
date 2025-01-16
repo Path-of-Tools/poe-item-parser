@@ -382,6 +382,63 @@ export class PoE2ItemParser {
     });
   }
 
+  public parseFireDamage(): Item["fireDamage"] {
+    const match = this.input.match(REGEX.FIRE_DAMAGE_PRESENT);
+
+    if (!match) {
+      return undefined;
+    }
+
+    const content = match[1];
+
+    const elementalDamage = content.matchAll(REGEX.ELEMENTAL_DAMAGE);
+
+    return Array.from(elementalDamage).map((damage) => {
+      return {
+        min: Number(damage[1]),
+        max: Number(damage[2]),
+      };
+    });
+  }
+
+  public parseColdDamage(): Item["coldDamage"] {
+    const match = this.input.match(REGEX.COLD_DAMAGE_PRESENT);
+
+    if (!match) {
+      return undefined;
+    }
+
+    const content = match[1];
+
+    const elementalDamage = content.matchAll(REGEX.ELEMENTAL_DAMAGE);
+
+    return Array.from(elementalDamage).map((damage) => {
+      return {
+        min: Number(damage[1]),
+        max: Number(damage[2]),
+      };
+    });
+  }
+
+  public parseLightningDamage(): Item["lightningDamage"] {
+    const match = this.input.match(REGEX.LIGHTNING_DAMAGE_PRESENT);
+
+    if (!match) {
+      return undefined;
+    }
+
+    const content = match[1];
+
+    const elementalDamage = content.matchAll(REGEX.ELEMENTAL_DAMAGE);
+
+    return Array.from(elementalDamage).map((damage) => {
+      return {
+        min: Number(damage[1]),
+        max: Number(damage[2]),
+      };
+    });
+  }
+
   public parsePhysicalDamage(): Item["physicalDamage"] {
     const match = this.input.match(REGEX.PHYSICAL_DAMAGE_PRESENT);
 
@@ -551,6 +608,9 @@ export class PoE2ItemParser {
       limitedTo: this.parseLimitedTo(),
       radius: this.parseRadius(),
       elementalDamage: this.parseElementalDamage(),
+      fireDamage: this.parseFireDamage(),
+      coldDamage: this.parseColdDamage(),
+      lightningDamage: this.parseLightningDamage(),
       physicalDamage: this.parsePhysicalDamage(),
       duration: this.parseDuration(),
       charges: this.parseChargeConsumption(),
