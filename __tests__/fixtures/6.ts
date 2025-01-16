@@ -55,7 +55,8 @@ const expectedResult: Item = {
   flavorText: {
     flavorText: "The older brother retained calm in the midst of fury.",
     lines: ["The older brother retained calm in the midst of fury."]
-  }
+  },
+  mirrored: false,
 };
 
 export { itemText, expectedResult };

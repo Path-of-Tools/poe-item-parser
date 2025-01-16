@@ -34,6 +34,7 @@ const expectedResult: Item = {
   corrupted: false,
   enchants: [],
   identified: false,
+  mirrored: false,
 };
 
 export { itemText, expectedResult };

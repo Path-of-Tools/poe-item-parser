@@ -27,6 +27,7 @@ export const REGEX = {
     PHYSICAL_DAMAGE_PRESENT: /Physical Damage: (.*)/,
     PHYSICAL_DAMAGE: /(\d+)-(\d+)/g,
     CORRUPTED: /^Corrupted$/m,
+    MIRRORED: /^Mirrored$/m,
     UNIDENTIFIED: /^Unidentified$/m,
     LASTS_X_SECONDS: /Lasts (\d+) Seconds/,
     CHARGE_CONSUMPTION: /Consumes (\d+) of (\d+) Charges on use/,

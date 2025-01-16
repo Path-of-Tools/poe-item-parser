@@ -12,6 +12,7 @@ export class PoE2ItemParser {
   private iRarityIndex: number = -1;
   private itemClass?: string;
   private corrupted?: boolean;
+  private mirrored?: boolean;
   private identified?: boolean;
   private rarity?: Item["itemRarity"];
   private indexesOfDashes: number[] = [];
@@ -25,13 +26,16 @@ export class PoE2ItemParser {
   }
 
   // Some types have some extra text below them
-  private hasTutorialText(): boolean|undefined {
+  private hasTutorialText(): boolean | undefined {
     if (!this.itemClass) {
       this.parseItemClass();
     }
 
-    return (this.itemClass && ["Jewels", "Quivers", "Relics"].includes(this.itemClass)) ||
-      this.itemClass?.endsWith("Flasks");
+    return (
+      (this.itemClass &&
+        ["Jewels", "Quivers", "Relics"].includes(this.itemClass)) ||
+      this.itemClass?.endsWith("Flasks")
+    );
   }
 
   private fixIfUnfulfilledRequirements() {
@@ -98,6 +102,14 @@ export class PoE2ItemParser {
     return !!match;
   }
 
+  public parseMirrored(): Item["mirrored"] {
+    const match = this.input.match(REGEX.MIRRORED);
+
+    this.mirrored = !!match;
+
+    return !!match;
+  }
+
   public parseItemName(): ItemName {
     let startSearchIndex = this.iRarityIndex || this.iLevelIndex;
 
@@ -143,6 +155,10 @@ export class PoE2ItemParser {
       this.corrupted = this.parseCorrupted();
     }
 
+    if (this.mirrored === undefined) {
+      this.mirrored = this.parseMirrored();
+    }
+
     if (!this.rarity) {
       this.parseRarity();
     }
@@ -175,12 +191,22 @@ export class PoE2ItemParser {
         indexFrom =
           this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
       }
-    } else if (!this.corrupted) {
+    } else if (!this.corrupted && !this.mirrored) {
       indexFrom =
         this.indexesOfDashes[this.indexesOfDashes.length - 1 - extraOffset];
     } else {
+      let localOffset = 0;
+
+      if (this.corrupted) {
+        localOffset += 1;
+      }
+
+      if (this.mirrored) {
+        localOffset += 1;
+      }
+
       indexFrom =
-        this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
+        this.indexesOfDashes[this.indexesOfDashes.length - 1 - extraOffset - localOffset];
     }
 
     const nextLineBreak = this.input.indexOf("\n", indexFrom);
@@ -532,6 +558,7 @@ export class PoE2ItemParser {
       blockChance: this.parseBlockChance(),
       identified: this.parseIdentified(),
       flaskRecovery: this.parseFlaskRecovery(),
+      mirrored: this.parseMirrored(),
     };
   }
 }

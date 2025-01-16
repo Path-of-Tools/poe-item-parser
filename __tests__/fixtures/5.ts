@@ -49,6 +49,7 @@ const expectedResult: Item = {
   },
   enchants: [],
   identified: true,
+  mirrored: false,
 };
 
 export { itemText, expectedResult };

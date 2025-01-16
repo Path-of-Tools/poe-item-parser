@@ -64,7 +64,8 @@ const expectedResult: Item = {
   charges: undefined,
   enchants: [],
   blockChance: undefined,
-  identified: true
+  identified: true,
+  mirrored: false,
 }
 
 export { itemText, expectedResult };

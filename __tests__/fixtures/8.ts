@@ -58,6 +58,7 @@ const expectedResult: Item = {
     flavorText: "The first Karui born on the fringes of the Vaal empire developed a blood fever born of corruption.",
     lines: ["The first Karui born on the fringes of the Vaal empire developed a blood fever born of corruption."]
   },
+  mirrored: false,
 };
 
 export { itemText, expectedResult };

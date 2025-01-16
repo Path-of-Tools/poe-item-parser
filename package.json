@@ -1,12 +1,13 @@
 {
   "name": "poe-item-parser",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
       "import": "./dist/poe-item-parser.js",
+      "require": "./dist/poe-item-parser.js",
       "types": "./dist/index.d.ts"
     }
   },

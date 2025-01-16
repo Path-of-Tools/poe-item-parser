@@ -55,7 +55,8 @@ const expectedResult: Item = {
   enchants: [],
   blockChance: undefined,
   identified: true,
-  flaskRecovery: undefined
+  flaskRecovery: undefined,
+  mirrored: false,
 }
 
 export { itemText, expectedResult };

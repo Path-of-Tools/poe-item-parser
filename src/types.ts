@@ -68,4 +68,5 @@ export interface Item {
   charges?: ItemCharge;
   flaskRecovery?: FlaskRecovery;
   identified: boolean;
+  mirrored: boolean;
 }

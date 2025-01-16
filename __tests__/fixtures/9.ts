@@ -63,6 +63,7 @@ const expectedResult: Item = {
     flavorText: "The final element the tale-women mastered was Time itself.",
     lines: ["The final element the tale-women", "mastered was Time itself."]
   },
+  mirrored: false,
 };
 
 export { itemText, expectedResult };

@@ -38,6 +38,7 @@ const expectedResult: Item = {
   corrupted: false,
   enchants: [],
   identified: true,
+  mirrored: false,
 };
 
 export { itemText, expectedResult };

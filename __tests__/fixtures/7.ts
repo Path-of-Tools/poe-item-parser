@@ -70,7 +70,8 @@ const expectedResult: Item = {
   flaskRecovery: {
     over: 9.7,
     mana: 372,
-  }
+  },
+  mirrored: false,
 };
 
 export { itemText, expectedResult };
