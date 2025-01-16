@@ -60,6 +60,9 @@ export interface Item {
   limitedTo?: number;
   radius?: string | undefined;
   elementalDamage?: ItemDamageRange[];
+  fireDamage?: ItemDamageRange[];
+  coldDamage?: ItemDamageRange[];
+  lightningDamage?: ItemDamageRange[];
   physicalDamage?: ItemDamageRange[];
   corrupted?: boolean;
   flavorText?: ItemFlavorText;
