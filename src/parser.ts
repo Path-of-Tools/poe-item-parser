@@ -223,6 +223,12 @@ export class PoE2ItemParser {
 
     const input = this.input.slice(nextLineBreak, nextDash).split("\n");
 
+    // If the item is a currency item and has a stack size, we don't want to parse the stack size as an affix
+    if (this.rarity === "Currency" &&
+      this.input.slice(nextLineBreak, nextDash).match(REGEX.STACK_SIZE)) {
+      return [];
+    }
+
     return input
       .filter((line) => line !== "")
       .map((affix) => this.parseAffix(affix));
