@@ -52,6 +52,8 @@ export interface Item {
   affixes: string[];
   requirements?: ItemRequirement;
   stackSize?: StackSize;
+  numberOfTrials?: number;
+  areaLevel?: number;
   sockets: number;
   runes: string[];
   implicits: string[];

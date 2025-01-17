@@ -36,5 +36,7 @@ export const REGEX = {
     CHARGE_CONSUMPTION: /Consumes (\d+) of (\d+) Charges on use/,
     NOTE_PRESENT: /Note: (.*)/,
     STACK_SIZE: /Stack Size: (\d+)(?:\/(\d+))?/,
+    TRIAL_COUNT: /Number of Trials: (.*)/,
+    AREA_LEVEL: /Area Level: (.*)/,
     RECOVERS_CHARGES: /(?<first>\d+)(?: \(augmented\))? (?<identifier>\w+) over (?<second>\d+(?:,\d+)?)(?: \(augmented\))?/
   };

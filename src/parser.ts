@@ -43,6 +43,21 @@ export class PoE2ItemParser {
     );
   }
 
+  private hasFlavourText(): boolean | undefined {
+    if (!this.itemClass) {
+      this.parseItemClass();
+    }
+
+    if (!this.rarity) {
+      this.parseRarity();
+    }
+
+    return (this.rarity === "Unique" ||
+      (this.itemClass === "Trial Coins") ||
+      (this.itemClass === "Inscribed Ultimatum")
+    );
+  }
+
   private fixIfUnfulfilledRequirements() {
     if (
       this.input.includes("You cannot use this item. Its stats will be ignored")
@@ -81,6 +96,12 @@ export class PoE2ItemParser {
     this.iLevelIndex = this.input.indexOf(match[0]) + match[0].length;
 
     return Number(content);
+  }
+
+  public parseAreaLevel(): Item["areaLevel"] {
+    const match = this.input.match(REGEX.AREA_LEVEL);
+
+    return match ? Number(match[1]) : undefined;
   }
 
   public parseRarity(): Item["itemRarity"] {
@@ -187,7 +208,7 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    if (this.rarity === "Unique") {
+    if (this.hasFlavourText()) {
       // If rarity is unique, we also have to deal with the flavor text...
       if (this.corrupted) {
         indexFrom =
@@ -221,15 +242,18 @@ export class PoE2ItemParser {
       nextDash = this.input.length;
     }
 
-    const input = this.input.slice(nextLineBreak, nextDash).split("\n");
+    const input = this.input.slice(nextLineBreak, nextDash);
 
-    // If the item is a currency item and has a stack size, we don't want to parse the stack size as an affix
-    if (this.rarity === "Currency" &&
-      this.input.slice(nextLineBreak, nextDash).match(REGEX.STACK_SIZE)) {
+    // fix for specific items without affixes wrongly parsing stackSize and itemLevel as affixes
+    if ((this.rarity === "Currency" && input.match(REGEX.STACK_SIZE)) ||
+      (this.itemClass === "Trial Coins" && input.match(REGEX.ITEM_LEVEL)) ||
+      (this.itemClass === "Inscribed Ultimatum" && input.match(REGEX.ITEM_LEVEL))
+    ) {
       return [];
     }
 
     return input
+      .split("\n")
       .filter((line) => line !== "")
       .map((affix) => this.parseAffix(affix));
   }
@@ -280,6 +304,12 @@ export class PoE2ItemParser {
     return match ? Number(match[1]) : undefined;
   }
 
+
+  public parseNumberOfTrials(): Item["numberOfTrials"] {
+    const match = this.input.match(REGEX.TRIAL_COUNT);
+
+    return match ? Number(match[1]) : undefined;
+  }
 
   public parseStackSize(): Item["stackSize"] {
     const match = this.input.match(REGEX.STACK_SIZE);
@@ -488,10 +518,7 @@ export class PoE2ItemParser {
       this.corrupted = this.parseCorrupted();
     }
 
-    const rarity = this.parseRarity();
-
-    if (rarity !== "Unique") {
-      // Not sure if any non-unique items has any flavor text, so for now this will do...
+    if (!this.hasFlavourText()) {
       return undefined;
     }
 
@@ -605,6 +632,7 @@ export class PoE2ItemParser {
       itemClass: this.parseItemClass(),
       itemRarity: this.parseRarity(),
       itemLevel: this.parseItemLevel(),
+      areaLevel: this.parseAreaLevel(),
       affixes: this.parseAffixes(),
       corrupted: this.parseCorrupted(),
       flavorText: this.parseFlavorText(),
@@ -616,6 +644,7 @@ export class PoE2ItemParser {
         level: this.parseLevelRequirement(),
       },
       stackSize: this.parseStackSize(),
+      numberOfTrials: this.parseNumberOfTrials(),
       sockets: this.parseSockets(),
       runes: this.parseRunes(),
       implicits: this.parseImplicits(),
