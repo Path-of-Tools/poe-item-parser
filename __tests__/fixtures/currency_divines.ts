@@ -42,6 +42,7 @@ const expectedResult: Item =
     armour: undefined,
     spirit: undefined
   },
+  sanctum: {},
   charmSlots: undefined,
   attacksPerSecond: undefined,
   criticalHitChance: undefined,
@@ -60,6 +61,7 @@ const expectedResult: Item =
   identified: true,
   flaskRecovery: undefined,
   mirrored: false,
+  unmodifiable: false,
   stackSize: { current: 272, max: 10 }
 }
 

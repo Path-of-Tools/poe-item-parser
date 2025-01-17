@@ -18,8 +18,8 @@ export interface ItemDamageRange {
 }
 
 export interface ItemName {
-  lines: string[];
   name: string;
+  lines: string[];
 }
 
 export interface ItemFlavorText {
@@ -44,6 +44,14 @@ export interface StackSize {
   max?: number;
 }
 
+export interface Sanctum {
+  sacredWater?: number,
+  minorBoons?: string[] | undefined ;
+  majorBoons?: string[] | undefined ;
+  minorAfflictions?: string[] | undefined ;
+  majorAfflictions?: string[] | undefined ;
+}
+
 export interface Item {
   itemClass?: string | undefined;
   itemLevel?: number | undefined;
@@ -61,6 +69,7 @@ export interface Item {
   qualityType?: string;
   blockChance?: number;
   stats: ItemStats;
+  sanctum: Sanctum;
   charmSlots?: number;
   attacksPerSecond?: number;
   criticalHitChance?: number;
@@ -80,4 +89,5 @@ export interface Item {
   flaskRecovery?: FlaskRecovery;
   identified: boolean;
   mirrored: boolean;
+  unmodifiable: boolean;
 }

@@ -52,10 +52,12 @@ const expectedResult: Item = {
   stats: {
     energyShield: 485,
   },
+  sanctum: {},
   corrupted: false,
   enchants: [],
   identified: true,
-  mirrored: false
+  mirrored: false,
+  unmodifiable: false,
 };
 
 export { itemText, expectedResult };

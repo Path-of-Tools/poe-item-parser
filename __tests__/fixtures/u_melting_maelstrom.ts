@@ -52,6 +52,7 @@ const expectedResult: Item = {
     energyShield: undefined,
     spirit: undefined,
   },
+  sanctum: {},
   quality: 20,
   sockets: 0,
   runes: [],
@@ -72,6 +73,7 @@ const expectedResult: Item = {
     mana: 372,
   },
   mirrored: false,
+  unmodifiable: false,
 };
 
 export { itemText, expectedResult };

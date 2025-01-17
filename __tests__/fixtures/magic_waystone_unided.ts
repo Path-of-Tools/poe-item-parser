@@ -1,47 +1,37 @@
 import { Item } from "../../src/types";
 
 const itemText = `
-Item Class: Inscribed Ultimatum
-Rarity: Currency
-Inscribed Ultimatum
+Item Class: Waystones
+Rarity: Magic
+Waystone (Tier 15)
 --------
-Area Level: 80
-Number of Trials: 10
+Waystone Tier: 15
 --------
-Item Level: 82
+Item Level: 79
 --------
-Mortals spend their lives wondering which
-fate shall be theirs. Chaos takes amusement
-in knowing the answer: all of them.
+Players in Area are 68% Delirious (enchant)
+30% increased Precursor Tablets found in Area (enchant)
 --------
-Take this item to The Temple of Chaos to participate in a Trial of Chaos.
+Unidentified
+--------
+Can be used in a Map Device, allowing you to enter a Map. Waystones can only be used once.
 `;
 
 const expectedResult: Item =
 {
-  itemClass: 'Inscribed Ultimatum',
-  itemRarity: 'Currency',
-  itemLevel: 82,
-  areaLevel: 80,
+  itemClass: 'Waystones',
+  itemRarity: 'Magic',
+  itemLevel: 79,
   affixes: [],
   corrupted: false,
-  flavorText: {
-    flavorText: 'Mortals spend their lives wondering which fate shall be theirs. Chaos takes amusement in knowing the answer: all of them.',
-    lines: [
-      'Mortals spend their lives wondering which',
-      'fate shall be theirs. Chaos takes amusement',
-      'in knowing the answer: all of them.',
-    ]
-  },
-  itemName: { name: 'Inscribed Ultimatum', lines: [ 'Inscribed Ultimatum' ] },
+  flavorText: undefined,
+  itemName: { name: 'Waystone (Tier 15)', lines: [ 'Waystone (Tier 15)' ] },
   requirements: {
     intelligence: undefined,
     strength: undefined,
     dexterity: undefined,
     level: undefined
   },
-  stackSize: undefined,
-  numberOfTrials: 10,
   sockets: 0,
   runes: [],
   implicits: [],
@@ -67,9 +57,12 @@ const expectedResult: Item =
   physicalDamage: undefined,
   duration: undefined,
   charges: undefined,
-  enchants: [],
+  enchants: [
+    'Players in Area are 68% Delirious',
+    '30% increased Precursor Tablets found in Area'
+  ],
   blockChance: undefined,
-  identified: true,
+  identified: false,
   flaskRecovery: undefined,
   mirrored: false,
   unmodifiable: false,

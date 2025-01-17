@@ -53,6 +53,7 @@ const expectedResult: Item = {
     armour: undefined,
     spirit: undefined
   },
+  sanctum: {},
   charmSlots: undefined,
   attacksPerSecond: undefined,
   criticalHitChance: undefined,
@@ -67,6 +68,7 @@ const expectedResult: Item = {
   blockChance: undefined,
   identified: true,
   mirrored: false,
+  unmodifiable: false,
 }
 
 export { itemText, expectedResult };

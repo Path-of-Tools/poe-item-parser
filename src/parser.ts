@@ -12,6 +12,7 @@ export class PoE2ItemParser {
   private iRarityIndex: number = -1;
   private itemClass?: string;
   private corrupted?: boolean;
+  private unmodifiable?: boolean;
   private mirrored?: boolean;
   private identified?: boolean;
   private rarity?: Item["itemRarity"];
@@ -37,7 +38,7 @@ export class PoE2ItemParser {
 
     return (
       (this.itemClass &&
-        ["Jewels", "Quivers", "Relics", "Inscribed Ultimatum"].includes(this.itemClass)) ||
+        ["Jewels", "Quivers", "Relics", "Inscribed Ultimatum", "Trial Coins"].includes(this.itemClass)) ||
       this.itemClass?.endsWith("Flasks") ||
       this.rarity === "Currency"
     );
@@ -120,6 +121,14 @@ export class PoE2ItemParser {
     return content;
   }
 
+  public parseUnmodifiable(): Item["unmodifiable"] {
+    const match = this.input.match(REGEX.UNMODIFIABLE);
+
+    this.unmodifiable = !!match;
+
+    return !!match;
+  }
+
   public parseCorrupted(): Item["corrupted"] {
     const match = this.input.match(REGEX.CORRUPTED);
 
@@ -181,6 +190,10 @@ export class PoE2ItemParser {
       this.corrupted = this.parseCorrupted();
     }
 
+    if (this.unmodifiable === undefined) {
+      this.unmodifiable = this.parseUnmodifiable();
+    }
+
     if (this.mirrored === undefined) {
       this.mirrored = this.parseMirrored();
     }
@@ -193,7 +206,8 @@ export class PoE2ItemParser {
       this.parseItemClass();
     }
 
-    if (this.rarity === "Normal") {
+    // Trial Coins are normal items with affixes ..
+    if (this.rarity === "Normal" && this.itemClass !== "Trial Coins") {
       return [];
     }
 
@@ -209,21 +223,20 @@ export class PoE2ItemParser {
     }
 
     if (this.hasFlavourText()) {
-      // If rarity is unique, we also have to deal with the flavor text...
-      if (this.corrupted) {
+      if (this.corrupted || this.unmodifiable) {
         indexFrom =
           this.indexesOfDashes[this.indexesOfDashes.length - 3 - extraOffset];
       } else {
         indexFrom =
           this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
       }
-    } else if (!this.corrupted && !this.mirrored) {
+    } else if (!this.corrupted && !this.mirrored && !this.unmodifiable) {
       indexFrom =
         this.indexesOfDashes[this.indexesOfDashes.length - 1 - extraOffset];
     } else {
       let localOffset = 0;
 
-      if (this.corrupted) {
+      if (this.corrupted || this.unmodifiable) {
         localOffset += 1;
       }
 
@@ -518,6 +531,10 @@ export class PoE2ItemParser {
       this.corrupted = this.parseCorrupted();
     }
 
+    if (!this.unmodifiable) {
+      this.unmodifiable = this.parseUnmodifiable();
+    }
+
     if (!this.hasFlavourText()) {
       return undefined;
     }
@@ -539,7 +556,7 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    if (this.corrupted) {
+    if (this.corrupted || this.unmodifiable) {
       indexFrom = indexesOfDashes[indexesOfDashes.length - 2 - extraOffset];
     } else {
       indexFrom = indexesOfDashes[indexesOfDashes.length - 1 - extraOffset];
@@ -627,6 +644,59 @@ export class PoE2ItemParser {
     return output;
   }
 
+  public parseSacredWater(): Item["sanctum"]["sacredWater"] {
+    const match = this.input.match(REGEX.SACRED_WATER);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseMinorBoons(): Item["sanctum"]["minorBoons"] {
+    const match = this.input.match(REGEX.MINOR_BOONS);
+
+    const boons = match ? match[1] : undefined;
+
+    if (!boons) {
+      return undefined;
+    }
+
+    return boons.trim().split(", ");
+  }
+
+  public parseMajorBoons(): Item["sanctum"]["majorBoons"] {
+    const match = this.input.match(REGEX.MAJOR_BOONS);
+
+    const boons = match ? match[1] : undefined;
+
+    if (!boons) {
+      return undefined;
+    }
+
+    return boons.trim().split(", ");
+  }
+
+  public parseMinorAfflictions(): Item["sanctum"]["minorAfflictions"] {
+    const match = this.input.match(REGEX.MINOR_AFFLICTIONS);
+
+    const afflictions = match ? match[1] : undefined;
+
+    if (!afflictions) {
+      return undefined;
+    }
+
+    return afflictions.trim().split(", ");
+  }
+
+  public parseMajorAfflictions(): Item["sanctum"]["majorAfflictions"] {
+    const match = this.input.match(REGEX.MAJOR_AFFLICTIONS);
+
+    const afflictions = match ? match[1] : undefined;
+
+    if (!afflictions) {
+      return undefined;
+    }
+
+    return afflictions.trim().split(", ");
+  }
   getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
@@ -635,6 +705,7 @@ export class PoE2ItemParser {
       areaLevel: this.parseAreaLevel(),
       affixes: this.parseAffixes(),
       corrupted: this.parseCorrupted(),
+      unmodifiable: this.parseUnmodifiable(),
       flavorText: this.parseFlavorText(),
       itemName: this.parseItemName(),
       requirements: {
@@ -655,6 +726,13 @@ export class PoE2ItemParser {
         evasionRating: this.parseEvasionRating(),
         armour: this.parseArmour(),
         spirit: this.parseSpirit(),
+      },
+      sanctum: {
+        sacredWater: this.parseSacredWater(),
+        minorBoons: this.parseMinorBoons(),
+        majorBoons: this.parseMajorBoons(),
+        minorAfflictions: this.parseMinorAfflictions(),
+        majorAfflictions: this.parseMajorAfflictions(),
       },
       charmSlots: this.parseCharmSlots(),
       attacksPerSecond: this.parseAttacksPerSecond(),

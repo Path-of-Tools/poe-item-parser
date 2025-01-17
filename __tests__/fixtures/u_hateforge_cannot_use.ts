@@ -48,6 +48,7 @@ const expectedResult: Item = {
     energyShield: undefined,
     spirit: undefined,
   },
+  sanctum: {},
   sockets: 0,
   runes: [],
   implicits: [],
@@ -59,6 +60,7 @@ const expectedResult: Item = {
     lines: ["The first Karui born on the fringes of the Vaal empire developed a blood fever born of corruption."]
   },
   mirrored: false,
+  unmodifiable: false,
 };
 
 export { itemText, expectedResult };
