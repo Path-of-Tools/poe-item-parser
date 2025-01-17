@@ -39,6 +39,11 @@ export interface FlaskRecovery {
   over: number;
 }
 
+export interface StackSize {
+  current: number;
+  max?: number;
+}
+
 export interface Item {
   itemClass?: string | undefined;
   itemLevel?: number | undefined;
@@ -46,6 +51,7 @@ export interface Item {
   itemName: ItemName;
   affixes: string[];
   requirements?: ItemRequirement;
+  stackSize?: StackSize;
   sockets: number;
   runes: string[];
   implicits: string[];

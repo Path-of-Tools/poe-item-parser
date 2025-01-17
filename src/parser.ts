@@ -31,10 +31,15 @@ export class PoE2ItemParser {
       this.parseItemClass();
     }
 
+    if (!this.rarity) {
+      this.parseRarity();
+    }
+
     return (
       (this.itemClass &&
         ["Jewels", "Quivers", "Relics"].includes(this.itemClass)) ||
-      this.itemClass?.endsWith("Flasks")
+      this.itemClass?.endsWith("Flasks") ||
+      this.rarity === "Currency"
     );
   }
 
@@ -267,6 +272,20 @@ export class PoE2ItemParser {
     const match = this.input.match(REGEX.REQUIREMENT_LEVEL);
 
     return match ? Number(match[1]) : undefined;
+  }
+
+
+  public parseStackSize(): Item["stackSize"] {
+    const match = this.input.match(REGEX.STACK_SIZE);
+
+    if (!match) {
+      return undefined;
+    }
+
+    return {
+      current: Number(match[1]),
+      max: match[2] ? Number(match[2]) : undefined,
+    };
   }
 
   public parseSockets(): Item["sockets"] {
@@ -590,6 +609,7 @@ export class PoE2ItemParser {
         dexterity: this.parseDexterityRequirement(),
         level: this.parseLevelRequirement(),
       },
+      stackSize: this.parseStackSize(),
       sockets: this.parseSockets(),
       runes: this.parseRunes(),
       implicits: this.parseImplicits(),
