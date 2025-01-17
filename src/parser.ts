@@ -38,7 +38,7 @@ export class PoE2ItemParser {
 
     return (
       (this.itemClass &&
-        ["Jewels", "Quivers", "Relics", "Inscribed Ultimatum", "Trial Coins"].includes(this.itemClass)) ||
+        ["Jewels", "Quivers", "Relics", "Inscribed Ultimatum", "Trial Coins", "Skill Gems"].includes(this.itemClass)) ||
       this.itemClass?.endsWith("Flasks") ||
       this.rarity === "Currency"
     );
