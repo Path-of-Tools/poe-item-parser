@@ -555,7 +555,7 @@ export class PoE2ItemParser {
     const value = this.input.slice(nextLineBreak, nextDash).trim();
 
     return {
-      flavorText: value.replace("\n", " ").trim(),
+      flavorText: value.replaceAll("\n", " ").trim(),
       lines: value.split("\n").filter((line) => line !== ""),
     };
   }
