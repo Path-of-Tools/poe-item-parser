@@ -90,4 +90,6 @@ export interface Item {
   identified: boolean;
   mirrored: boolean;
   unmodifiable: boolean;
+  waystoneTier?: number;
+  waystoneDropChance?: number;
 }

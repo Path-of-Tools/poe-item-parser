@@ -2,38 +2,49 @@ import { Item } from "../../src/types";
 
 const itemText = `
 Item Class: Waystones
-Rarity: Magic
-Waystone (Tier 15)
+Rarity: Rare
+Warped Expedition
+Waystone (Tier 16)
 --------
-Waystone Tier: 15
+Waystone Tier: 16
+Waystone Drop Chance: +260% (augmented)
 --------
 Item Level: 79
 --------
-Players in Area are 68% Delirious (enchant)
-30% increased Precursor Tablets found in Area (enchant)
---------
-Unidentified
+Area contains 8 additional packs of Bramble Monsters
+29% increased Pack size
+Players are Cursed with Temporal Chains
+Monsters have 40% chance to Poison on Hit
+Monsters have 25% chance to steal Power, Frenzy and Endurance charges on Hit
 --------
 Can be used in a Map Device, allowing you to enter a Map. Waystones can only be used once.
+--------
+Corrupted
 `;
 
 const expectedResult: Item =
 {
   itemClass: 'Waystones',
-  itemRarity: 'Magic',
+  itemRarity: 'Rare',
   itemLevel: 79,
-  affixes: [],
-  corrupted: false,
+  affixes: [
+    'Area contains 8 additional packs of Bramble Monsters',
+    '29% increased Pack size',
+    'Players are Cursed with Temporal Chains',
+    'Monsters have 40% chance to Poison on Hit',
+    'Monsters have 25% chance to steal Power, Frenzy and Endurance charges on Hit',
+  ],
+  corrupted: true,
   flavorText: undefined,
-  itemName: { name: 'Waystone (Tier 15)', lines: [ 'Waystone (Tier 15)' ] },
+  itemName: { name: 'Warped Expedition Waystone (Tier 16)', lines: [ 'Warped Expedition', 'Waystone (Tier 16)' ] },
   requirements: {
     intelligence: undefined,
     strength: undefined,
     dexterity: undefined,
     level: undefined
   },
-  waystoneTier: 15,
-  waystoneDropChance: undefined,
+  waystoneTier: 16,
+  waystoneDropChance: 260,
   sockets: 0,
   runes: [],
   implicits: [],
@@ -59,12 +70,9 @@ const expectedResult: Item =
   physicalDamage: undefined,
   duration: undefined,
   charges: undefined,
-  enchants: [
-    'Players in Area are 68% Delirious',
-    '30% increased Precursor Tablets found in Area'
-  ],
+  enchants: [],
   blockChance: undefined,
-  identified: false,
+  identified: true,
   flaskRecovery: undefined,
   mirrored: false,
   unmodifiable: false,

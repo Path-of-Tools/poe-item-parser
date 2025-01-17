@@ -38,7 +38,7 @@ export class PoE2ItemParser {
 
     return (
       (this.itemClass &&
-        ["Jewels", "Quivers", "Relics", "Inscribed Ultimatum", "Trial Coins", "Skill Gems"].includes(this.itemClass)) ||
+        ["Jewels", "Quivers", "Relics", "Inscribed Ultimatum", "Trial Coins", "Skill Gems", "Waystones"].includes(this.itemClass)) ||
       this.itemClass?.endsWith("Flasks") ||
       this.rarity === "Currency"
     );
@@ -697,6 +697,19 @@ export class PoE2ItemParser {
 
     return afflictions.trim().split(", ");
   }
+
+  public parseWaystoneTier(): Item["waystoneTier"] {
+    const match = this.input.match(REGEX.WAYSTONE_TIER);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseWaystoneDropChance(): Item["waystoneDropChance"] {
+    const match = this.input.match(REGEX.WAYSTONE_DROP_CHANCE);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
   getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
@@ -752,6 +765,8 @@ export class PoE2ItemParser {
       identified: this.parseIdentified(),
       flaskRecovery: this.parseFlaskRecovery(),
       mirrored: this.parseMirrored(),
+      waystoneTier: this.parseWaystoneTier(),
+      waystoneDropChance: this.parseWaystoneDropChance(),
     };
   }
 }

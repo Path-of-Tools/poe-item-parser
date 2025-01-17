@@ -44,5 +44,7 @@ export const REGEX = {
     MAJOR_BOONS: /Major Boons: (.*)/,
     MINOR_AFFLICTIONS: /Minor Afflictions: (.*)/,
     MAJOR_AFFLICTIONS: /Major Afflictions: (.*)/,
+    WAYSTONE_TIER: /Waystone Tier: (\d+)/,
+    WAYSTONE_DROP_CHANCE: /Waystone Drop Chance: \+(\d+)\%(?: \(augmented\))?/,
     RECOVERS_CHARGES: /(?<first>\d+)(?: \(augmented\))? (?<identifier>\w+) over (?<second>\d+(?:,\d+)?)(?: \(augmented\))?/
   };
