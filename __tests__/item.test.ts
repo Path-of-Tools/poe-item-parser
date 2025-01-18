@@ -6,8 +6,8 @@ const filesInDir = fs
     .readdirSync("__tests__/fixtures")
     .filter((f) => f.endsWith(".ts"));
 
-for (const file of filesInDir) {
-    describe("Parsing items", () => {
+describe("Parsing items", () => {
+    for (const file of filesInDir) {
         it(`Should parse ${file}`, () => {
             const { itemText, expectedResult } = require(`./fixtures/${file}`);
 
@@ -15,5 +15,5 @@ for (const file of filesInDir) {
 
             expect(parser).toEqual(expectedResult);
         })
-    });
-}
+    }
+});
