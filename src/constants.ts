@@ -34,7 +34,8 @@ export const REGEX = {
     MIRRORED: /^Mirrored$/m,
     UNIDENTIFIED: /^Unidentified$/m,
     LASTS_X_SECONDS: /Lasts (\d+) Seconds/,
-    CHARGE_CONSUMPTION: /Consumes (\d+) of (\d+) Charges on use/,
+    RECOVERS_CHARGES: /(?<first>\d+)(?: \(augmented\))? (?<identifier>\w+) over (?<second>\d+(?:,\d+)?)(?: \(augmented\))?/,
+    CHARGE_CONSUMPTION: /Consumes (\d+)(?: \(augmented\))? of (\d+)(?: \(augmented\))? Charges on use/,
     NOTE_PRESENT: /Note: (.*)/,
     STACK_SIZE: /Stack Size: (\d+)(?:\/(\d+))?/,
     TRIAL_COUNT: /Number of Trials: (\d+)/,
@@ -46,5 +47,4 @@ export const REGEX = {
     MAJOR_AFFLICTIONS: /Major Afflictions: (.*)/,
     WAYSTONE_TIER: /Waystone Tier: (\d+)/,
     WAYSTONE_DROP_CHANCE: /Waystone Drop Chance: \+(\d+)\%(?: \(augmented\))?/,
-    RECOVERS_CHARGES: /(?<first>\d+)(?: \(augmented\))? (?<identifier>\w+) over (?<second>\d+(?:,\d+)?)(?: \(augmented\))?/
   };
