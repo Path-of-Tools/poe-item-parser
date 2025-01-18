@@ -47,6 +47,7 @@ export class PoE2ItemParser {
       "Pinnacle Keys",
       "Breachstones",
       "Map Fragments",
+      "Tablet",
     ];
 
     return (
