@@ -36,9 +36,22 @@ export class PoE2ItemParser {
       this.parseRarity();
     }
 
+    const tutorialItemClasses = [
+      "Jewels",
+      "Quivers",
+      "Relics",
+      "Trial Coins",
+      "Inscribed Ultimatum",
+      "Skill Gems",
+      "Waystones",
+      "Pinnacle Keys",
+      "Breachstones",
+      "Map Fragments",
+    ];
+
     return (
       (this.itemClass &&
-        ["Jewels", "Quivers", "Relics", "Inscribed Ultimatum", "Trial Coins", "Skill Gems", "Waystones"].includes(this.itemClass)) ||
+        tutorialItemClasses.includes(this.itemClass)) ||
       this.itemClass?.endsWith("Flasks") ||
       this.rarity === "Currency"
     );
@@ -55,7 +68,10 @@ export class PoE2ItemParser {
 
     return (this.rarity === "Unique" ||
       (this.itemClass === "Trial Coins") ||
-      (this.itemClass === "Inscribed Ultimatum")
+      (this.itemClass === "Inscribed Ultimatum") ||
+      (this.itemClass === "Pinnacle Keys") ||
+      (this.itemClass === "Breachstones") ||
+      (this.itemClass === "Map Fragments")
     );
   }
 
