@@ -390,6 +390,15 @@ export class PoE2ItemParser {
   }
 
   public parseArmour(): Item["stats"]["armour"] {
+    if (!this.rarity) {
+      this.parseRarity();
+    }
+
+    // don't parse armour on currency because this matches soulcore and rune affixes
+    if (this.rarity === "Currency") {
+      return undefined;
+    }
+
     const match = this.input.match(REGEX.ARMOUR);
 
     return match ? Number(match[1]) : undefined;
