@@ -47,9 +47,11 @@ const expectedResult: Item = {
     evasionRating: undefined,
     energyShield: undefined,
   },
+  sanctum: {},
   enchants: [],
   identified: true,
   mirrored: false,
+  unmodifiable: false,
 };
 
 export { itemText, expectedResult };

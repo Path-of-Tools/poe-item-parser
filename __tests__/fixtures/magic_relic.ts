@@ -42,6 +42,7 @@ const expectedResult: Item = {
     armour: undefined,
     spirit: undefined
   },
+  sanctum: {},
   charmSlots: undefined,
   attacksPerSecond: undefined,
   criticalHitChance: undefined,
@@ -57,6 +58,7 @@ const expectedResult: Item = {
   identified: true,
   flaskRecovery: undefined,
   mirrored: false,
+  unmodifiable: false,
 }
 
 export { itemText, expectedResult };

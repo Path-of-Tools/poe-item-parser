@@ -52,6 +52,7 @@ const expectedResult: Item = {
     energyShield: 244,
     spirit: undefined,
   },
+  sanctum: {},
   sockets: 2,
   quality: 20,
   runes: [],
@@ -64,6 +65,7 @@ const expectedResult: Item = {
     lines: ["The final element the tale-women", "mastered was Time itself."]
   },
   mirrored: false,
+  unmodifiable: false,
 };
 
 export { itemText, expectedResult };

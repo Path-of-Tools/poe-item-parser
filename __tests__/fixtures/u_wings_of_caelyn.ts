@@ -50,6 +50,7 @@ const expectedResult: Item = {
     evasionRating: undefined,
     energyShield: undefined,
   },
+  sanctum: {},
   enchants: [],
   identified: true,
   flavorText: {
@@ -57,6 +58,7 @@ const expectedResult: Item = {
     lines: ["The older brother retained calm in the midst of fury."]
   },
   mirrored: false,
+  unmodifiable: false
 };
 
 export { itemText, expectedResult };

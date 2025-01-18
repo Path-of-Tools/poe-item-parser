@@ -23,9 +23,7 @@ Item Level: 66
 +40 to maximum Life
 +25% to Fire Resistance
 +29% to Lightning Resistance
-+220 to Stun Threshold
---------
-Mirrored`;
++220 to Stun Threshold`;
 
 const expectedResult: Item = {
   itemClass: "Body Armours",
@@ -54,10 +52,12 @@ const expectedResult: Item = {
   stats: {
     energyShield: 485,
   },
+  sanctum: {},
   corrupted: false,
-  mirrored: true,
   enchants: [],
   identified: true,
+  mirrored: false,
+  unmodifiable: false,
 };
 
 export { itemText, expectedResult };

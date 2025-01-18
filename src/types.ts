@@ -18,8 +18,8 @@ export interface ItemDamageRange {
 }
 
 export interface ItemName {
-  lines: string[];
   name: string;
+  lines: string[];
 }
 
 export interface ItemFlavorText {
@@ -39,6 +39,19 @@ export interface FlaskRecovery {
   over: number;
 }
 
+export interface StackSize {
+  current: number;
+  max?: number;
+}
+
+export interface Sanctum {
+  sacredWater?: number,
+  minorBoons?: string[] | undefined ;
+  majorBoons?: string[] | undefined ;
+  minorAfflictions?: string[] | undefined ;
+  majorAfflictions?: string[] | undefined ;
+}
+
 export interface Item {
   itemClass?: string | undefined;
   itemLevel?: number | undefined;
@@ -46,6 +59,9 @@ export interface Item {
   itemName: ItemName;
   affixes: string[];
   requirements?: ItemRequirement;
+  stackSize?: StackSize;
+  numberOfTrials?: number;
+  areaLevel?: number;
   sockets: number;
   runes: string[];
   implicits: string[];
@@ -53,6 +69,7 @@ export interface Item {
   qualityType?: string;
   blockChance?: number;
   stats: ItemStats;
+  sanctum: Sanctum;
   charmSlots?: number;
   attacksPerSecond?: number;
   criticalHitChance?: number;
@@ -72,4 +89,7 @@ export interface Item {
   flaskRecovery?: FlaskRecovery;
   identified: boolean;
   mirrored: boolean;
+  unmodifiable: boolean;
+  waystoneTier?: number;
+  waystoneDropChance?: number;
 }

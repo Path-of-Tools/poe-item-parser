@@ -12,6 +12,7 @@ export class PoE2ItemParser {
   private iRarityIndex: number = -1;
   private itemClass?: string;
   private corrupted?: boolean;
+  private unmodifiable?: boolean;
   private mirrored?: boolean;
   private identified?: boolean;
   private rarity?: Item["itemRarity"];
@@ -31,10 +32,47 @@ export class PoE2ItemParser {
       this.parseItemClass();
     }
 
+    if (!this.rarity) {
+      this.parseRarity();
+    }
+
+    const tutorialItemClasses = [
+      "Jewels",
+      "Quivers",
+      "Relics",
+      "Trial Coins",
+      "Inscribed Ultimatum",
+      "Skill Gems",
+      "Waystones",
+      "Pinnacle Keys",
+      "Breachstones",
+      "Map Fragments",
+      "Tablet",
+    ];
+
     return (
       (this.itemClass &&
-        ["Jewels", "Quivers", "Relics"].includes(this.itemClass)) ||
-      this.itemClass?.endsWith("Flasks")
+        tutorialItemClasses.includes(this.itemClass)) ||
+      this.itemClass?.endsWith("Flasks") ||
+      this.rarity === "Currency"
+    );
+  }
+
+  private hasFlavourText(): boolean | undefined {
+    if (!this.itemClass) {
+      this.parseItemClass();
+    }
+
+    if (!this.rarity) {
+      this.parseRarity();
+    }
+
+    return (this.rarity === "Unique" ||
+      (this.itemClass === "Trial Coins") ||
+      (this.itemClass === "Inscribed Ultimatum") ||
+      (this.itemClass === "Pinnacle Keys") ||
+      (this.itemClass === "Breachstones") ||
+      (this.itemClass === "Map Fragments")
     );
   }
 
@@ -78,6 +116,12 @@ export class PoE2ItemParser {
     return Number(content);
   }
 
+  public parseAreaLevel(): Item["areaLevel"] {
+    const match = this.input.match(REGEX.AREA_LEVEL);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
   public parseRarity(): Item["itemRarity"] {
     const match = this.input.match(REGEX.ITEM_RARITY);
 
@@ -92,6 +136,14 @@ export class PoE2ItemParser {
     this.rarity = content;
 
     return content;
+  }
+
+  public parseUnmodifiable(): Item["unmodifiable"] {
+    const match = this.input.match(REGEX.UNMODIFIABLE);
+
+    this.unmodifiable = !!match;
+
+    return !!match;
   }
 
   public parseCorrupted(): Item["corrupted"] {
@@ -155,6 +207,10 @@ export class PoE2ItemParser {
       this.corrupted = this.parseCorrupted();
     }
 
+    if (this.unmodifiable === undefined) {
+      this.unmodifiable = this.parseUnmodifiable();
+    }
+
     if (this.mirrored === undefined) {
       this.mirrored = this.parseMirrored();
     }
@@ -167,7 +223,8 @@ export class PoE2ItemParser {
       this.parseItemClass();
     }
 
-    if (this.rarity === "Normal") {
+    // Trial Coins are normal items with affixes ..
+    if (this.rarity === "Normal" && this.itemClass !== "Trial Coins") {
       return [];
     }
 
@@ -182,22 +239,21 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    if (this.rarity === "Unique") {
-      // If rarity is unique, we also have to deal with the flavor text...
-      if (this.corrupted) {
+    if (this.hasFlavourText()) {
+      if (this.corrupted || this.unmodifiable) {
         indexFrom =
           this.indexesOfDashes[this.indexesOfDashes.length - 3 - extraOffset];
       } else {
         indexFrom =
           this.indexesOfDashes[this.indexesOfDashes.length - 2 - extraOffset];
       }
-    } else if (!this.corrupted && !this.mirrored) {
+    } else if (!this.corrupted && !this.mirrored && !this.unmodifiable) {
       indexFrom =
         this.indexesOfDashes[this.indexesOfDashes.length - 1 - extraOffset];
     } else {
       let localOffset = 0;
 
-      if (this.corrupted) {
+      if (this.corrupted || this.unmodifiable) {
         localOffset += 1;
       }
 
@@ -216,9 +272,18 @@ export class PoE2ItemParser {
       nextDash = this.input.length;
     }
 
-    const input = this.input.slice(nextLineBreak, nextDash).split("\n");
+    const input = this.input.slice(nextLineBreak, nextDash);
+
+    // fix for specific items without affixes wrongly parsing stackSize and itemLevel as affixes
+    if ((this.rarity === "Currency" && input.match(REGEX.STACK_SIZE)) ||
+      (this.itemClass === "Trial Coins" && input.match(REGEX.ITEM_LEVEL)) ||
+      (this.itemClass === "Inscribed Ultimatum" && input.match(REGEX.ITEM_LEVEL))
+    ) {
+      return [];
+    }
 
     return input
+      .split("\n")
       .filter((line) => line !== "")
       .map((affix) => this.parseAffix(affix));
   }
@@ -267,6 +332,26 @@ export class PoE2ItemParser {
     const match = this.input.match(REGEX.REQUIREMENT_LEVEL);
 
     return match ? Number(match[1]) : undefined;
+  }
+
+
+  public parseNumberOfTrials(): Item["numberOfTrials"] {
+    const match = this.input.match(REGEX.TRIAL_COUNT);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseStackSize(): Item["stackSize"] {
+    const match = this.input.match(REGEX.STACK_SIZE);
+
+    if (!match) {
+      return undefined;
+    }
+
+    return {
+      current: Number(match[1]),
+      max: match[2] ? Number(match[2]) : undefined,
+    };
   }
 
   public parseSockets(): Item["sockets"] {
@@ -322,6 +407,15 @@ export class PoE2ItemParser {
   }
 
   public parseArmour(): Item["stats"]["armour"] {
+    if (!this.rarity) {
+      this.parseRarity();
+    }
+
+    // don't parse armour on currency because this matches soulcore and rune affixes
+    if (this.rarity === "Currency") {
+      return undefined;
+    }
+
     const match = this.input.match(REGEX.ARMOUR);
 
     return match ? Number(match[1]) : undefined;
@@ -463,10 +557,11 @@ export class PoE2ItemParser {
       this.corrupted = this.parseCorrupted();
     }
 
-    const rarity = this.parseRarity();
+    if (!this.unmodifiable) {
+      this.unmodifiable = this.parseUnmodifiable();
+    }
 
-    if (rarity !== "Unique") {
-      // Not sure if any non-unique items has any flavor text, so for now this will do...
+    if (!this.hasFlavourText()) {
       return undefined;
     }
 
@@ -487,7 +582,7 @@ export class PoE2ItemParser {
       extraOffset += 1;
     }
 
-    if (this.corrupted) {
+    if (this.corrupted || this.unmodifiable) {
       indexFrom = indexesOfDashes[indexesOfDashes.length - 2 - extraOffset];
     } else {
       indexFrom = indexesOfDashes[indexesOfDashes.length - 1 - extraOffset];
@@ -503,7 +598,7 @@ export class PoE2ItemParser {
     const value = this.input.slice(nextLineBreak, nextDash).trim();
 
     return {
-      flavorText: value.replace("\n", " ").trim(),
+      flavorText: value.replaceAll("\n", " ").trim(),
       lines: value.split("\n").filter((line) => line !== ""),
     };
   }
@@ -575,13 +670,81 @@ export class PoE2ItemParser {
     return output;
   }
 
+  public parseSacredWater(): Item["sanctum"]["sacredWater"] {
+    const match = this.input.match(REGEX.SACRED_WATER);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseMinorBoons(): Item["sanctum"]["minorBoons"] {
+    const match = this.input.match(REGEX.MINOR_BOONS);
+
+    const boons = match ? match[1] : undefined;
+
+    if (!boons) {
+      return undefined;
+    }
+
+    return boons.trim().split(", ");
+  }
+
+  public parseMajorBoons(): Item["sanctum"]["majorBoons"] {
+    const match = this.input.match(REGEX.MAJOR_BOONS);
+
+    const boons = match ? match[1] : undefined;
+
+    if (!boons) {
+      return undefined;
+    }
+
+    return boons.trim().split(", ");
+  }
+
+  public parseMinorAfflictions(): Item["sanctum"]["minorAfflictions"] {
+    const match = this.input.match(REGEX.MINOR_AFFLICTIONS);
+
+    const afflictions = match ? match[1] : undefined;
+
+    if (!afflictions) {
+      return undefined;
+    }
+
+    return afflictions.trim().split(", ");
+  }
+
+  public parseMajorAfflictions(): Item["sanctum"]["majorAfflictions"] {
+    const match = this.input.match(REGEX.MAJOR_AFFLICTIONS);
+
+    const afflictions = match ? match[1] : undefined;
+
+    if (!afflictions) {
+      return undefined;
+    }
+
+    return afflictions.trim().split(", ");
+  }
+
+  public parseWaystoneTier(): Item["waystoneTier"] {
+    const match = this.input.match(REGEX.WAYSTONE_TIER);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
+  public parseWaystoneDropChance(): Item["waystoneDropChance"] {
+    const match = this.input.match(REGEX.WAYSTONE_DROP_CHANCE);
+
+    return match ? Number(match[1]) : undefined;
+  }
+
   getItem(): Item {
     return {
       itemClass: this.parseItemClass(),
       itemRarity: this.parseRarity(),
       itemLevel: this.parseItemLevel(),
+      areaLevel: this.parseAreaLevel(),
       affixes: this.parseAffixes(),
       corrupted: this.parseCorrupted(),
+      unmodifiable: this.parseUnmodifiable(),
       flavorText: this.parseFlavorText(),
       itemName: this.parseItemName(),
       requirements: {
@@ -590,6 +753,8 @@ export class PoE2ItemParser {
         dexterity: this.parseDexterityRequirement(),
         level: this.parseLevelRequirement(),
       },
+      stackSize: this.parseStackSize(),
+      numberOfTrials: this.parseNumberOfTrials(),
       sockets: this.parseSockets(),
       runes: this.parseRunes(),
       implicits: this.parseImplicits(),
@@ -600,6 +765,13 @@ export class PoE2ItemParser {
         evasionRating: this.parseEvasionRating(),
         armour: this.parseArmour(),
         spirit: this.parseSpirit(),
+      },
+      sanctum: {
+        sacredWater: this.parseSacredWater(),
+        minorBoons: this.parseMinorBoons(),
+        majorBoons: this.parseMajorBoons(),
+        minorAfflictions: this.parseMinorAfflictions(),
+        majorAfflictions: this.parseMajorAfflictions(),
       },
       charmSlots: this.parseCharmSlots(),
       attacksPerSecond: this.parseAttacksPerSecond(),
@@ -619,6 +791,8 @@ export class PoE2ItemParser {
       identified: this.parseIdentified(),
       flaskRecovery: this.parseFlaskRecovery(),
       mirrored: this.parseMirrored(),
+      waystoneTier: this.parseWaystoneTier(),
+      waystoneDropChance: this.parseWaystoneDropChance(),
     };
   }
 }
