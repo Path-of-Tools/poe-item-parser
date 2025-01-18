@@ -18,7 +18,7 @@ export const REGEX = {
     ENCHANT: /(.*) \(enchant\)/g,
     CHARM_SLOTS: /Charm Slots: (\d+)/,
     ATTACKS_PER_SECOND: /Attacks per Second: (\d+(\.\d+)?)(?: \(augmented\))?/,
-    CRITICAL_HIT_CHANCE: /Critical Hit Chance: (\d+)%?/,
+    CRITICAL_HIT_CHANCE: /Critical Hit Chance: (.*)%/,
     RELOAD_TIME: /Reload Time: (\d+(\.\d+)?)(?: \(augmented\))?/,
     LIMITED_TO: /Limited to: (\d+)/,
     RADIUS: /Radius: (.*)/,
